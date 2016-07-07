@@ -38,8 +38,11 @@ class PublicacionesRoutes
             }
         });
 
-        $app->put("/publicaciones/{id:[0-9]+}",function($id) use ($app) {
-            echo "Modificar publicacion numero $id";
+        $app->put("/publicaciones/{id:[0-9]+}",function($id) use ($app,$publicacionesController) {
+            $data = (array) json_decode($app->request->getRawBody());
+            $return = $publicacionesController->modificar($id,$data);
+
+             Configuracion::response($app,$return,200);                              
         });
 
         $app->delete("/publicaciones/{id:[0-9]+}",function($id) use ($app) {
