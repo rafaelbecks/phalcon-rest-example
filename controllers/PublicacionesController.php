@@ -39,7 +39,7 @@ class PublicacionesController{
     {
         $publicacion = Publicaciones::findFirst($id);
 
-        if(count($publicacion)>0)
+        if(is_object($publicacion)>0)
         {
             if($publicacion->save($data))
             {
@@ -62,6 +62,21 @@ class PublicacionesController{
     public function eliminar($id)
     {
         
+        $publicacion = Publicaciones::findFirst($id);
+        if(is_object($publicacion)>0)
+        {
+            if($publicacion->delete())
+            {
+                return array("resultado" => "OK", "data" => "El registro fue eliminado satisfacatoriamente");
+            }
+            {
+                return array("resultado" => "error", "data" => "Ocurrió un error al eliminar el registro");
+            }
+        }else
+        {
+            return array("resultado" => "error", "data" => "El registro que $id no existe");
+        }
+
     }
 
     public function customQuery($query)

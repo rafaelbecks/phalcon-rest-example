@@ -29,26 +29,32 @@ class PublicacionesRoutes
             
             $return = $publicacionesController->registrar($data);
             
-            if($return["resultado"] == "OK")
-            {
-              Configuracion::response($app,$return,201);                              
-            }else
-            {
-              Configuracion::response($app,$return,400);                                              
-            }
+            $this->validarRespuesta($return,$app);
         });
 
         $app->put("/publicaciones/{id:[0-9]+}",function($id) use ($app,$publicacionesController) {
             $data = (array) json_decode($app->request->getRawBody());
             $return = $publicacionesController->modificar($id,$data);
 
-             Configuracion::response($app,$return,200);                              
+            $this->validarRespuesta($return,$app);
         });
 
-        $app->delete("/publicaciones/{id:[0-9]+}",function($id) use ($app) {
-            echo "Eliminar publicacion numero $id";
+        $app->delete("/publicaciones/{id:[0-9]+}",function($id) use ($app,$publicacionesController) {
+            $return = $publicacionesController->eliminar($id);
+            $this->validarRespuesta($return,$app);
         });
 
+    }
+
+    public function validarRespuesta($data,$app)
+    {
+        if($data["resultado"] == "OK")
+        {
+          Configuracion::response($app,$data,200);                              
+        }else
+        {
+          Configuracion::response($app,$data,400);                                              
+        }
     }
 
 }
