@@ -10,7 +10,12 @@ class PublicacionesRoutes
 
         $app->get("/publicaciones",function() use ($app,$publicacionesController) {
 
-            $data = $publicacionesController->listar();
+            
+            $query = $app->request->getQuery();
+
+            unset($query["_url"]);
+            
+            $data = $publicacionesController->listar($query);
 
             if(is_array($data))
             {
@@ -19,7 +24,6 @@ class PublicacionesRoutes
             {
                 Configuracion::response($app,["data" => $data],404);                
             }
-
 
         });
 

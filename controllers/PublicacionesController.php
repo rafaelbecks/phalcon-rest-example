@@ -2,10 +2,12 @@
 
 class PublicacionesController{
     
-    public function listar()
+    public function listar($query)
     {
-        $publicaciones = Publicaciones::find();
-
+        $publicaciones = Publicaciones::find(array(
+            Configuracion::arrayToSQLQuery($query),
+             "bind" => $query
+        ));
         if(count($publicaciones)>0)
         {
             return $publicaciones->toArray();
